@@ -107,6 +107,44 @@ func shellSort(items: inout [Int]) {
 //items = randomItems(range: 6)
 //shellSort(items: &items)
 
+
+//MARK:- 快速排序（升序）
+/*
+ 步骤：
+ 1、从数列中挑出最后元素，称为 “基准”（pivot），
+ 2、重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的中间位置。这个称为分区（partition）操作。
+ 3、递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序。
+ */
+func quickSort(arr: inout [Int]) {
+    func partition(startIndex: Int, _ endIndex: Int) -> Int {
+        var i = startIndex - 1
+        let key = arr[endIndex]
+        for j in startIndex ..< endIndex {
+            if arr[j] < key {
+                i = i + 1
+                let temp = arr[j]
+                arr[j] = arr[i]
+                arr[i] = temp
+            }
+        }
+        arr[endIndex] = arr[i + 1]
+        arr[i + 1] = key
+        return i + 1
+    }
+    
+    func internalQuickSort(startIndex: Int, _ endIndex: Int) {
+        if startIndex < endIndex {
+            let q = partition(startIndex:startIndex, endIndex)
+            internalQuickSort(startIndex:startIndex, q - 1)
+            internalQuickSort(startIndex:q + 1, endIndex)
+        }
+    }
+    internalQuickSort(startIndex: 0, arr.count - 1)
+}
+
+//items = randomItems(range: 1000)
+quickSort(arr: &items)
+
 //MARK:- 堆排序(降序)
 /*
 步骤：
@@ -176,44 +214,8 @@ func heapSort(arr: inout [Int]) {
 }
 
 //items = randomItems(range: 1000)
-heapSort(arr: &items)
+//heapSort(arr: &items)
 
-//MARK:- 快速排序（升序）
-/*
- 步骤：
- 1、从数列中挑出一个元素，称为 “基准”（pivot），
- 2、重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的中间位置。这个称为分区（partition）操作。
- 3、递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序。
- */
-func quickSort(arr: inout [Int]) {
-    func partition(p: Int, _ r: Int) -> Int {
-        var i = p - 1
-        let key = arr[r]
-        for j in p ..< r {
-            if arr[j] < key {
-                i = i + 1
-                let temp = arr[j]
-                arr[j] = arr[i]
-                arr[i] = temp
-            }
-        }
-        arr[r] = arr[i + 1]
-        arr[i + 1] = key
-        return i + 1
-    }
-    
-    func internalQuickSort(p: Int, _ r: Int) {
-        if p < r {
-            let q = partition(p:p, r)
-            internalQuickSort(p:p, q - 1)
-            internalQuickSort(p:q + 1, r)
-        }
-    }
-    internalQuickSort(p: 0, arr.count - 1)
-}
-
-//items = randomItems(range: 1000)
-//quickSort(arr: &items)
 
 //MARK:- 归并排序（升序）
 /*
